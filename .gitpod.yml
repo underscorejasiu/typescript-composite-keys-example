@@ -1,0 +1,18 @@
+image:
+  file: .gitpod.Dockerfile
+
+ports:
+  - port: 5432
+    onOpen: ignore
+    description: "PostgreSQL Database"
+    name: "PostgreSQL"
+  - port: 3000
+    onOpen: open-browser
+    description: "Application"
+    name: "Application"
+  
+
+tasks:
+  - name: Install dependencies
+    init: npm install
+    command: npm run start
