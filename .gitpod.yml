@@ -13,6 +13,6 @@ ports:
   
 
 tasks:
-  - name: Install dependencies
+  - name: Start app
     init: npm install
-    command: npm run start
+    command: docker-compose up
