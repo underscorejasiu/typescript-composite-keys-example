@@ -1,4 +1,5 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Item } from "./item.entity";
 import { Workbook } from "./workbook.entity";
 
 @Entity()
@@ -8,8 +9,19 @@ export class ObjectEntity {
 
   @PrimaryColumn()
   workbookId: Workbook["id"];
-  
-  @ManyToOne(() => Workbook, { nullable: true, cascade: ["soft-remove"] })
-  @JoinColumn({ name: "workbookId" })
-  workbook: Workbook;
+
+  @Column()
+  itemId: Workbook["id"];
+
+  @Column()
+  objectData: string;
+
+  @OneToOne(() => Item, (item: Item) => item.objectEntity, {
+    cascade: ["soft-remove"],
+  })
+  @JoinColumn([
+    { name: "itemId", referencedColumnName: "id" },
+    { name: "workbookId", referencedColumnName: "workbookId" },
+  ])
+  item: Item;
 }

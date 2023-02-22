@@ -14,19 +14,20 @@ AppDataSource.initialize().then(async () => {
     const workbooks = await AppDataSource.manager.find(Workbook)
     console.log("Loaded workbooks: ", workbooks);
 
-    // object insert
-    const object = new ObjectEntity()
-    object.workbookId = workbook.id;
+    // // object insert
+    // const object = new ObjectEntity()
+    // object.workbookId = workbook.id;
 
-    await AppDataSource.manager.save(object)
-    console.log("Saved a new object with id: " + object.id);
-    const objects = await AppDataSource.manager.find(ObjectEntity)
-    console.log("Loaded objects: ", objects)
+    // await AppDataSource.manager.save(object)
+    // console.log("Saved a new object with id: " + object.id);
+    // const objects = await AppDataSource.manager.find(ObjectEntity)
+    // console.log("Loaded objects: ", objects)
 
     // item insert
     const item = new Item()
-    item.workbookId = workbook.id;
-    item.object = object.id;
+    item.workbook = workbook;
+    item.objectEntity = new ObjectEntity()
+    item.objectEntity.objectData = 'test';
 
     await AppDataSource.manager.save(item)
     console.log("Saved a new item with id: " + item.id);
@@ -46,19 +47,19 @@ AppDataSource.initialize().then(async () => {
 
 
     // get via query builder 
-    try {
-        console.log('Load via query builder.')
-        const itemWithRelations = await AppDataSource.manager.getRepository(Item)
-            .createQueryBuilder('item')
-            .leftJoinAndSelect('item.workbook', 'workbook')
-            .leftJoinAndSelect('item.objectEntity', 'objectEntity')
-            .where('item.object = :object', { object: object.id })
-            .andWhere('item.workbookId = :workbookId', { workbookId: workbook.id })
-            .getOne();
-        console.log('Loaded via query builder with relations: ', itemWithRelations)
-    } catch (e) {
-        console.log('Error during load via query builder with relations: ', e)
-    }
+    // try {
+    //     console.log('Load via query builder.')
+    //     const itemWithRelations = await AppDataSource.manager.getRepository(Item)
+    //         .createQueryBuilder('item')
+    //         .leftJoinAndSelect('item.workbook', 'workbook')
+    //         .leftJoinAndSelect('item.objectEntity', 'objectEntity')
+    //         .where('item.object = :object', { object: object.id })
+    //         .andWhere('item.workbookId = :workbookId', { workbookId: workbook.id })
+    //         .getOne();
+    //     console.log('Loaded via query builder with relations: ', itemWithRelations)
+    // } catch (e) {
+    //     console.log('Error during load via query builder with relations: ', e)
+    // }
 
 
 }).catch(error => console.log(error))

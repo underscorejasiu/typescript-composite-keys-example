@@ -10,20 +10,12 @@ export class Item {
   @Column({ nullable: true })
   workbookId: Workbook["id"];
 
-  @Column({ nullable: true })
-  object: ObjectEntity["id"];
-
   @ManyToOne(() => Workbook, { nullable: true, onDelete: "CASCADE" })
   @JoinColumn({ name: "workbookId" })
   workbook: Workbook;
-  
-  @OneToOne("ObjectEntity", {
-    nullable: true,
+
+  @OneToOne(() => ObjectEntity, (object: ObjectEntity) => object.item, {
     cascade: ["insert", "soft-remove"],
   })
-  @JoinColumn([
-    { name: "object", referencedColumnName: "id" },
-    { name: "workbookId", referencedColumnName: "workbookId" },
-  ])
   objectEntity: ObjectEntity;
 }
